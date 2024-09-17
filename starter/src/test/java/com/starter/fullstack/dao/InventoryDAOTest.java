@@ -108,4 +108,15 @@ public class InventoryDAOTest {
     inventoryDAO.update(inventoryId, inventory);
     Assert.assertEquals(inventory.getName(), inventoryDAO.retrieve(inventoryId).get().getName());
   }
+  @Test
+  public void delete() {
+    Inventory inventory = new Inventory();
+    inventory.setId("TESTID");
+    inventory.setName(NAME);
+    inventory.setProductType(PRODUCT_TYPE);
+    inventoryDAO.create(inventory);
+    inventoryDAO.delete("TESTID");
+    List<Inventory> actualInventory = this.inventoryDAO.findAll();
+    Assert.assertEquals(0, actualInventory.size());
+  }
 }
