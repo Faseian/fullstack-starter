@@ -52,9 +52,7 @@ public class InventoryDAO {
    */
   public Inventory create(Inventory inventory) {
     // TODO
-    Assert.notNull(inventory, "Object must not be null");
-    inventory.setId(null);
-    return this.mongoTemplate.save(inventory);
+    return null;
   }
 
   /**
@@ -64,7 +62,7 @@ public class InventoryDAO {
    */
   public Optional<Inventory> retrieve(String id) {
     // TODO
-    return this.mongoTemplate.find(id);
+    return Optional.empty();
   }
 
   /**
