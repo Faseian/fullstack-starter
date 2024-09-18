@@ -63,8 +63,30 @@ public class InventoryDAOTest {
     Assert.assertEquals(inventory, actualInventory.get(0));
   }
 
-  /*@Test
-  public void retrieve() {
+  @Test
+  public void createMultiple() {
+    Inventory inventory = new Inventory();
+    Inventory inventory1 = new Inventory();
+    inventory.setName("Nathan");
+    inventory.setProductType(PRODUCT_TYPE);
+    inventory1.setName(NAME);
+    inventory1.setProductType(PRODUCT_TYPE);
+    inventoryDAO.create(inventory);
+    inventoryDAO.create(inventory1);
+    List<Inventory> actualInventory = this.inventoryDAO.findAll();
+    Assert.assertEquals(2, actualInventory.size());
+    Assert.assertEquals(inventory, actualInventory.get(0));
+    Assert.assertEquals(inventory1, actualInventory.get(1));
+  }
 
-  }*/
+  @Test
+  public void retrieve() {
+    Inventory inventory = new Inventory();
+    inventory.setName(NAME);
+    inventory.setProductType(PRODUCT_TYPE);
+    inventoryDAO.create(inventory);
+    List<Inventory> actualList = this.inventoryDAO.findAll();
+    String holder = actualList.get(0).getId().toString();
+    Assert.assertEquals(inventory.getName(), inventoryDAO.retrieve(holder).get().getName());
+  }
 }

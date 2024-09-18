@@ -8,6 +8,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.data.mongodb.core.index.IndexOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.util.Assert;
 
 /**
@@ -64,7 +66,11 @@ public class InventoryDAO {
    */
   public Optional<Inventory> retrieve(String id) {
     // TODO
-    //return this.mongoTemplate.find(id);
+    Assert.notNull(id, "String must not be null");
+    Query query = new Query();
+    query.addCriteria(Criteria.where("id").is(id));
+    Inventory inventory = this.mongoTemplate.findOne(query, Inventory.class);
+    return Optional.of(inventory);
   }
 
   /**
