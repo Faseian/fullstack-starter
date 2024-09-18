@@ -28,7 +28,7 @@ public class InventoryDAOTest {
   private MongoTemplate mongoTemplate;
   private InventoryDAO inventoryDAO;
   private static final String NAME = "Amber";
-  private static final String NAMETWO = "Nathan"
+  private static final String NAMETWO = "Nathan";
   private static final String PRODUCT_TYPE = "hops";
 
   @Before
@@ -88,7 +88,7 @@ public class InventoryDAOTest {
     inventoryDAO.create(inventory);
     List<Inventory> actualList = this.inventoryDAO.findAll();
     String inventoryId = actualList.get(0).getId().toString();
-    Assert.assertEquals(inventory.getName(), inventoryDAO.retrieve(holder).get().getName());
+    Assert.assertEquals(inventory.getName(), inventoryDAO.retrieve(inventoryId).get().getName());
   }
 
   @Test
@@ -99,9 +99,9 @@ public class InventoryDAOTest {
     inventoryDAO.create(inventory);
     inventory.setName(NAMETWO);
     List<Inventory> actualList = this.inventoryDAO.findAll();
-    String holder = actualList.get(0).getId().toString();
-    inventory.setId(holder);
-    inventory.update(inventory);
-    Assert.assertEquals(inventory.getName(), inventoryDAO.retrieve(holder).get().getName());
+    String inventoryId = actualList.get(0).getId().toString();
+    inventory.setId(inventoryId);
+    inventoryDAO.update(inventoryId, inventory);
+    Assert.assertEquals(inventory.getName(), inventoryDAO.retrieve(inventoryId).get().getName());
   }
 }
