@@ -28,6 +28,7 @@ public class InventoryDAOTest {
   private MongoTemplate mongoTemplate;
   private InventoryDAO inventoryDAO;
   private static final String NAME = "Amber";
+  private static final String NAMETWO = "Nathan"
   private static final String PRODUCT_TYPE = "hops";
 
   @Before
@@ -86,7 +87,21 @@ public class InventoryDAOTest {
     inventory.setProductType(PRODUCT_TYPE);
     inventoryDAO.create(inventory);
     List<Inventory> actualList = this.inventoryDAO.findAll();
+    String inventoryId = actualList.get(0).getId().toString();
+    Assert.assertEquals(inventory.getName(), inventoryDAO.retrieve(holder).get().getName());
+  }
+
+  @Test
+  public void update() {
+    Inventory inventory = new Inventory();
+    inventory.setName(NAME);
+    inventory.setProductType(PRODUCT_TYPE);
+    inventoryDAO.create(inventory);
+    inventory.setName(NAMETWO);
+    List<Inventory> actualList = this.inventoryDAO.findAll();
     String holder = actualList.get(0).getId().toString();
+    inventory.setId(holder);
+    inventory.update(inventory);
     Assert.assertEquals(inventory.getName(), inventoryDAO.retrieve(holder).get().getName());
   }
 }
