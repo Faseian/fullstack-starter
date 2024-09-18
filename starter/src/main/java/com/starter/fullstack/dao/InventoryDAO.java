@@ -8,6 +8,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.data.mongodb.core.index.IndexOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.util.Assert;
 
 /**
@@ -52,7 +54,9 @@ public class InventoryDAO {
    */
   public Inventory create(Inventory inventory) {
     // TODO
-    return null;
+    Assert.notNull(inventory, "Object must not be null");
+    inventory.setId(null);
+    return this.mongoTemplate.save(inventory);
   }
 
   /**
@@ -62,7 +66,11 @@ public class InventoryDAO {
    */
   public Optional<Inventory> retrieve(String id) {
     // TODO
-    return Optional.empty();
+    Assert.notNull(id, "String must not be null");
+    Query query = new Query();
+    query.addCriteria(Criteria.where("id").is(id));
+    Inventory inventory = this.mongoTemplate.findOne(query, Inventory.class);
+    return Optional.of(inventory);
   }
 
   /**
@@ -73,7 +81,9 @@ public class InventoryDAO {
    */
   public Optional<Inventory> update(String id, Inventory inventory) {
     // TODO
-    return Optional.empty();
+    Assert.notNull(id, "id must not be null");
+    inventory.setId(id);
+    return Optional.of(this.mongoTemplate.save(inventory));
   }
 
   /**
