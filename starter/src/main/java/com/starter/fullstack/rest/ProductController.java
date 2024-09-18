@@ -35,7 +35,6 @@ public class ProductController {
   public List<Product> findProducts() {
     return this.productDAO.findAll();
   }
-
   /**
    * Save Product.
    * @param product product.
