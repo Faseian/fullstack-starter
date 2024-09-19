@@ -31,9 +31,9 @@ public class InventoryControllerTest {
   private ObjectMapper objectMapper;
 
   private Inventory inventory;
-  private static final String testId = "TEST"
-  private static final String testName = "TESTNAME"
-  private static final String testType = "TESTTYPE"
+  private static final String testId = "TEST";
+  private static final String testName = "TESTNAME";
+  private static final String testType = "TESTTYPE";
 
   @Before
   public void setup() throws Throwable {
