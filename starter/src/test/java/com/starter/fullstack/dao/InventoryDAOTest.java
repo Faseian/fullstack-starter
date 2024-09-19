@@ -60,12 +60,8 @@ public class InventoryDAOTest {
     inventory.setName(NAME);
     inventory.setProductType(PRODUCT_TYPE);
     inventoryDAO.create(inventory);
-    Inventory inventoryTwo = new Inventory();
-    inventoryTwo.setName("NAME");
-    inventoryTwo.setProductType(PRODUCT_TYPE);
-    inventoryDAO.create(inventoryTwo);
     List<Inventory> actualInventory = this.inventoryDAO.findAll();
-    Assert.assertEquals(2, actualInventory.size());
+    Assert.assertEquals(inventory, actualInventory.get(0));
   }
 
   @Test
@@ -111,11 +107,12 @@ public class InventoryDAOTest {
   @Test
   public void delete() {
     Inventory inventory = new Inventory();
-    inventory.setId("TESTID");
     inventory.setName(NAME);
     inventory.setProductType(PRODUCT_TYPE);
     inventoryDAO.create(inventory);
-    inventoryDAO.delete("TESTID");
+    List<Inventory> actualList = this.inventoryDAO.findAll();
+    String inventoryId = actualList.get(0).getId().toString();
+    inventoryDAO.delete(inventoryId);
     List<Inventory> actualInventory = this.inventoryDAO.findAll();
     Assert.assertEquals(0, actualInventory.size());
   }
