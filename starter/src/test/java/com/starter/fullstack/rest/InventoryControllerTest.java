@@ -52,14 +52,14 @@ public class InventoryControllerTest {
 
   @Test
     public void create() throws Throwable {
-    this.inventory = new Inventory();
-    this.inventory.setId(testId);
-    this.inventory.setName(testName);
-    this.inventory.setProductType(testType);
+    Inventory newInventory = new Inventory();
+    newInventory.setId(testId);
+    newInventory.setName(testName);
+    newInventory.setProductType(testType);
     this.mockMvc.perform(post("/inventory")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
-            .content(this.objectMapper.writeValueAsString(this.inventory)))
+            .content(this.objectMapper.writeValueAsString(newInventory)))
         .andExpect(status().isOk());
 
     Assert.assertEquals(2, this.mongoTemplate.findAll(Inventory.class).size());
