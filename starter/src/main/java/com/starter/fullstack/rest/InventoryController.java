@@ -44,10 +44,11 @@ public class InventoryController {
   }
 
   @DeleteMapping
-  public void deleteInventoryById(@RequestBody List<String> ids) {
+  public List<Inventory> deleteInventoryById(@RequestBody List<String> ids) {
     Assert.notEmpty(ids, "Inventory Ids were not provided");
     for (String id : ids) {
       this.inventoryDAO.delete(id);
     }
+    return this.inventoryDAO.findAll();
   }
 }
