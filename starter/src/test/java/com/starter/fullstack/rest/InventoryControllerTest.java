@@ -31,13 +31,16 @@ public class InventoryControllerTest {
   private ObjectMapper objectMapper;
 
   private Inventory inventory;
+  private static final String testId = "TEST"
+  private static final String testName = "TESTNAME"
+  private static final String testType = "TESTTYPE"
 
   @Before
   public void setup() throws Throwable {
     this.inventory = new Inventory();
-    this.inventory.setId("ID");
-    this.inventory.setName("TEST");
-    this.inventory.setProductType("hops");
+    this.inventory.setId(testId);
+    this.inventory.setName(testName);
+    this.inventory.setProductType(testType);
     // Sets the Mongo ID for us
     this.inventory = this.mongoTemplate.save(this.inventory);
   }
@@ -50,9 +53,9 @@ public class InventoryControllerTest {
   @Test
     public void create() throws Throwable {
     this.inventory = new Inventory();
-    this.inventory.setId("TEST");
-    this.inventory.setName("TESTNAME");
-    this.inventory.setProductType("TESTTYPE");
+    this.inventory.setId(testId);
+    this.inventory.setName(testName);
+    this.inventory.setProductType(testType);
     this.mockMvc.perform(post("/inventory")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)

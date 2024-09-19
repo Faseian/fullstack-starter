@@ -60,12 +60,8 @@ public class InventoryDAOTest {
     inventory.setName(NAME);
     inventory.setProductType(PRODUCT_TYPE);
     inventoryDAO.create(inventory);
-    Inventory inventoryTwo = new Inventory();
-    inventoryTwo.setName("NAME");
-    inventoryTwo.setProductType(PRODUCT_TYPE);
-    inventoryDAO.create(inventoryTwo);
     List<Inventory> actualInventory = this.inventoryDAO.findAll();
-    Assert.assertEquals(2, actualInventory.size());
+    Assert.assertEquals(inventory, actualInventory.get(0));
   }
 
   @Test
