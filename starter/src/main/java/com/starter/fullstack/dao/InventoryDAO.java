@@ -82,6 +82,7 @@ public class InventoryDAO {
   public Optional<Inventory> update(String id, Inventory inventory) {
     // TODO
     Assert.notNull(id, "id must not be null");
+    Assert.notNull(inventory, "Inventory must not be null");
     inventory.setId(id);
     return Optional.of(this.mongoTemplate.save(inventory));
   }

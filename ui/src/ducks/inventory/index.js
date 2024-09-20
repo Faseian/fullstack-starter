@@ -6,19 +6,21 @@ const actions = {
   INVENTORY_GET_ALL_PENDING: 'inventory/get_all_PENDING',
   INVENTORY_SAVE: 'inventory/save',
   INVENTORY_DELETE: 'inventory/delete',
-  INVENTORY_REFRESH: 'inventory/refresh'
+  INVENTORY_REFRESH: 'inventory/refresh',
+  INVETORY_GET_BY_ID: 'inventory/get_by_id',
+  INVENTORY_UPDATE: 'inventory/update'
 }
 
 export let defaultState = {
   all: []
 }
 
-export const findInventory = createAction(actions.INVENTORY_GET_ALL, () => {
+export const findInventory = createAction(actions.INVENTORY_GET_ALL, () =>
   //TODO
   (dispatch, config) => axios
     .get(`${config.restAPIUrl}/inventory`)
     .then((suc) => dispatch(refreshInventory(suc.data)))
-})
+)
 
 export const saveInventory = createAction(actions.INVENTORY_SAVE, (inventory) =>
   (dispatch, getState, config) => axios
@@ -35,9 +37,32 @@ export const saveInventory = createAction(actions.INVENTORY_SAVE, (inventory) =>
     })
 )
 
+export const removeInventory = createAction(actions.INVENTORY_DELETE, (ids) =>
+  (dispatch, getState, config) => axios
+    .delete(`${config.restAPIUrl}/inventory`, { data: ids })
+    .then((suc) => {
+      const invs = []
+      getState().inventory.all.forEach(inv => {
+        if (!ids.includes(inv.id)) {
+          invs.push(inv)
+        }
+      })
+      dispatch(refreshInventory(invs))
+    })
+)
+
+export const retrieveInventoryById = createAction(actions.INVETORY_GET_BY_ID, (id) =>
+  (dispatch, config) => axios
+    .get(`${config.restAPIUrl}/inventory`, { data: id })
+    .then((suc) => dispatch(refreshInventory(suc.data)))
+)
+
+//export const updateInventory = createAction(actions.INVENTORY_UPDATE, (id))
+
 export const refreshInventory = createAction(actions.INVENTORY_REFRESH, (payload) =>
   (dispatcher, getState, config) =>
-    payload.sort((inventoryA, inventoryB) => inventoryA.name < inventoryB.name ? -1 : inventoryA.name > inventoryB.name ? 1 : 0)
+    payload.sort((inventoryA, inventoryB) =>
+      inventoryA.name < inventoryB.name ? -1 : inventoryA.name > inventoryB.name ? 1 : 0)
 )
 
 export default handleActions({
