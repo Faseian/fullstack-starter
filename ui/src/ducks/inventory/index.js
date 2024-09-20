@@ -42,4 +42,11 @@ export const refreshInventory = createAction(actions.INVENTORY_REFRESH, (payload
 
 export default handleActions({
   //TODO
+  [actions.INVENTORY_GET_ALL_PENDING]: (state) => ({
+    ...state,
+  }),
+  [actions.INVENTORY_REFRESH]: (state, action) => ({
+    ...state,
+    all: action.payload,
+  })
 }, defaultState)
