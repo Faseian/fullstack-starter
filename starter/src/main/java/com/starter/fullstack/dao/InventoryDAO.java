@@ -93,6 +93,8 @@ public class InventoryDAO {
    */
   public Optional<Inventory> delete(String id) {
     // TODO
-    return Optional.empty();
+    Assert.notNull(id, "Id must not be null");
+    Query query = new Query().addCriteria(Criteria.where("id").is(id));
+    return Optional.ofNullable(this.mongoTemplate.findAndRemove(query, Inventory.class));
   }
 }

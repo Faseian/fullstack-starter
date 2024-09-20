@@ -5,6 +5,7 @@ import com.starter.fullstack.dao.InventoryDAO;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,5 +41,14 @@ public class InventoryController {
   @PostMapping
   public Inventory saveInventory(@Valid @RequestBody Inventory inventory) {
     return this.inventoryDAO.create(inventory);
+  }
+
+  @DeleteMapping
+  public List<Inventory> deleteInventoryById(@RequestBody List<String> ids) {
+    Assert.notEmpty(ids, "Inventory Ids were not provided");
+    for (String id : ids) {
+      this.inventoryDAO.delete(id);
+    }
+    return this.inventoryDAO.findAll();
   }
 }

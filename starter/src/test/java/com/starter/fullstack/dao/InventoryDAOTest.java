@@ -99,9 +99,21 @@ public class InventoryDAOTest {
     inventoryDAO.create(inventory);
     inventory.setName(NAMETWO);
     List<Inventory> actualList = this.inventoryDAO.findAll();
-    String inventoryId = actualList.get(0).getId().toString();
+    String inventoryId = actualList.get(0).getId();
     inventory.setId(inventoryId);
     inventoryDAO.update(inventoryId, inventory);
     Assert.assertEquals(inventory.getName(), inventoryDAO.retrieve(inventoryId).get().getName());
+  }
+  @Test
+  public void delete() {
+    Inventory inventory = new Inventory();
+    inventory.setName(NAME);
+    inventory.setProductType(PRODUCT_TYPE);
+    inventoryDAO.create(inventory);
+    List<Inventory> actualList = this.inventoryDAO.findAll();
+    String inventoryId = actualList.get(0).getId();
+    inventoryDAO.delete(inventoryId);
+    List<Inventory> actualInventory = this.inventoryDAO.findAll();
+    Assert.assertEquals(0, actualInventory.size());
   }
 }
