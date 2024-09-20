@@ -17,7 +17,7 @@ export let defaultState = {
 
 export const findInventory = createAction(actions.INVENTORY_GET_ALL, () =>
   //TODO
-  (dispatch, config) => axios
+  (dispatch, getState, config) =>  axios
     .get(`${config.restAPIUrl}/inventory`)
     .then((suc) => dispatch(refreshInventory(suc.data)))
 )

@@ -48,6 +48,36 @@ class InventoryFormModal extends React.Component {
                       label='Name'
                       component={TextField}
                     />
+                    <Field
+                      custom={{ variant: 'outlined', fullWidth: true, }}
+                      name='productType'
+                      label='Product Type'
+                      component={TextField}
+                    />
+                    <Field
+                      custom={{ variant: 'outlined', fullWidth: true, }}
+                      name='description'
+                      label='Description'
+                      component={TextField}
+                    />
+                    <Field
+                      custom={{ variant: 'outlined', fullWidth: true, }}
+                      name='amount'
+                      label='Amount'
+                      component={TextField}
+                    />
+                    <Field
+                      custom={{ variant: 'outlined', fullWidth: true, }}
+                      name='unitOfMeasurement'
+                      label='Unit of Measurement'
+                      component={TextField}
+                    />
+                    <Field
+                      custom={{ variant: 'outlined', fullWidth: true, }}
+                      name='bestBeforeDate'
+                      label='Best Before Date'
+                      component={TextField}
+                    />
                   </Grid>
                 </Grid>
               </DialogContent>
