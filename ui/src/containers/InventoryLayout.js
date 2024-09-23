@@ -1,16 +1,9 @@
 import * as inventoryDuck from '../ducks/inventory'
 import * as productDuck from '../ducks/products'
-import Avatar from '@material-ui/core/Avatar'
 import Checkbox from '@material-ui/core/Checkbox'
-import Divider from '@material-ui/core/Divider'
 import Grid from '@material-ui/core/Grid'
-import ImageIcon from '@material-ui/icons/Image'
+import InventoryDeleteModal from '../components/Inventory/InventoryDeleteModal'
 import InventoryFormModal from '../components/Inventory/InventoryFormModal'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemAvatar from '@material-ui/core/ListItemAvatar'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
-import ListItemText from '@material-ui/core/ListItemText'
 import { makeStyles } from '@material-ui/core/styles'
 import { MeasurementUnits } from '../constants/units'
 import moment from 'moment'
@@ -39,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
 
 const normalizeInventory = (inventory) => inventory.map(inv => ({
   ...inv,
-  unitOfMeasurement: MeasurementUnits[inv.unitOfMeasurement].name,
+  unitOfMeasurement: MeasurementUnits[inv.unitOfMeasurement]?.name,
   bestBeforeDate: moment(inv.bestBeforeDate).format('MM/DD/YYYY')
 }))
 
@@ -57,6 +50,7 @@ const InventoryLayout = (props) => {
   const dispatch = useDispatch()
   const inventory = useSelector(state => state.inventory.all)
   const isFetched = useSelector(state => state.inventory.fetched && state.products.fetched)
+  const removeInventory = useCallback(ids => { dispatch(inventoryDuck.removeInventory(ids)) }, [dispatch])
   const saveInventory = useCallback(inventory => { dispatch(inventoryDuck.saveInventory(inventory)) }, [dispatch])
 
   useEffect(() => {
@@ -87,22 +81,10 @@ const InventoryLayout = (props) => {
     setDeleteOpen(false)
     setEditOpen(false)
     if (resetChecked) {
-      setChecked([])
+      setSelected([])
     }
   }
 
-  const [checked, setChecked] = React.useState([])
-  const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value)
-    const newChecked = [...checked]
-
-    if (currentIndex === -1) {
-      newChecked.push(value)
-    } else {
-      newChecked.splice(currentIndex, 1)
-    }
-    setChecked(newChecked)
-  }
 
   const normalizedInventory = normalizeInventory(inventory)
   const [order, setOrder] = React.useState('asc')
@@ -166,35 +148,6 @@ const InventoryLayout = (props) => {
               rowCount={normalizedInventory.length}
               headCells={headCells}
             />
-            <List dense disablePadding className={classes.root}>
-              {inventory.map((value, index) =>
-                <React.Fragment key={index}>
-                  <Divider/>
-                  <ListItem button onClick={handleToggle(value)}>
-                    <ListItemIcon>
-                      <Checkbox
-                        onChange={handleToggle(value)}
-                        checked={checked.indexOf(value) !== -1}
-                      />
-                    </ListItemIcon>
-                    <ListItemAvatar>
-                      <Avatar className={classes.medium}>
-                        <ImageIcon/>
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary={value.name}/>
-                  </ListItem>
-                </React.Fragment>
-              )}
-            </List>
-            <InventoryFormModal
-              title = 'Create'
-              formName = 'inventoryCreate'
-              isDialogOpen = {isCreateOpen}
-              handleDialog = {toggleModals}
-              handleInventory = {saveInventory}
-              initialValues = {{}}
-            />
             <TableBody>
               {stableSort(normalizedInventory, getComparator(order, orderBy))
                 .map(inv => {
@@ -210,7 +163,9 @@ const InventoryLayout = (props) => {
                       selected={isItemSelected}
                     >
                       <TableCell padding='checkbox'>
-                        <Checkbox checked={isItemSelected}/>
+                        <Checkbox
+                          checked={isItemSelected}
+                        />
                       </TableCell>
                       <TableCell padding='none'>{inv.name}</TableCell>
                       <TableCell align='right'>{inv.productType}</TableCell>
@@ -224,6 +179,20 @@ const InventoryLayout = (props) => {
             </TableBody>
           </Table>
         </TableContainer>
+        <InventoryFormModal
+          title = 'Create'
+          formName = 'inventoryCreate'
+          isDialogOpen = {isCreateOpen}
+          handleDialog = {toggleModals}
+          handleInventory = {saveInventory}
+          initialValues = {{}}
+        />
+        <InventoryDeleteModal
+          isDialogOpen = {isDeleteOpen}
+          handleDialog = {toggleModals}
+          handleDelete = {removeInventory}
+          initialValues = {selected.map(check => check)}
+        />
       </Grid>
     </Grid>
   )

@@ -12,19 +12,20 @@ const actions = {
 }
 
 export let defaultState = {
-  all: []
+  all: [],
+  fetched: false,
 }
 
 export const findInventory = createAction(actions.INVENTORY_GET_ALL, () =>
   //TODO
-  (dispatch, getState, config) =>  axios
+  (dispatch, getState, config) => axios
     .get(`${config.restAPIUrl}/inventory`)
     .then((suc) => dispatch(refreshInventory(suc.data)))
 )
 
 export const saveInventory = createAction(actions.INVENTORY_SAVE, (inventory) =>
   (dispatch, getState, config) => axios
-    .post(`${config.restAPIUrl}/inventory`)
+    .post(`${config.restAPIUrl}/inventory`, inventory)
     .then((suc) => {
       const invs = []
       getState().inventory.all.forEach(inv => {
@@ -69,9 +70,11 @@ export default handleActions({
   //TODO
   [actions.INVENTORY_GET_ALL_PENDING]: (state) => ({
     ...state,
+    fetched: false
   }),
   [actions.INVENTORY_REFRESH]: (state, action) => ({
     ...state,
     all: action.payload,
+    fetched: true
   })
 }, defaultState)

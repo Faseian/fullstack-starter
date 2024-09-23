@@ -5,6 +5,7 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Grid from '@material-ui/core/Grid'
 import React from 'react'
+import { Select } from '@material-ui/core'
 import TextField from '../Form/TextField'
 import { Field, Form, Formik } from 'formik'
 
@@ -13,7 +14,7 @@ class InventoryFormModal extends React.Component {
     const {
       formName,
       handleDialog,
-      handleProduct,
+      handleInventory,
       title,
       initialValues
     } = this.props
@@ -27,7 +28,7 @@ class InventoryFormModal extends React.Component {
         <Formik
           initialValues={initialValues}
           onSubmit={values => {
-            handleProduct(values)
+            handleInventory(values)
             handleDialog(true)
           }}>
           {helpers =>

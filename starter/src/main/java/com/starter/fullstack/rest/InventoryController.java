@@ -55,11 +55,11 @@ public class InventoryController {
   }
 
   @DeleteMapping
-  public List<Inventory> deleteInventoryById(@RequestBody List<String> ids) {
-    Assert.notEmpty(ids, "Inventory Ids were not provided");
+  public List<String> deleteInventoryById(@RequestBody List<String> ids) {
+    Assert.notNull(ids, "Inventory Ids were not provided");
     for (String id : ids) {
       this.inventoryDAO.delete(id);
     }
-    return this.inventoryDAO.findAll();
+    return ids;
   }
 }
