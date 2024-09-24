@@ -1,5 +1,5 @@
-/*import { getIn } from 'formik'
-import MuiTextField from '@material-ui/core/TextField'
+import { getIn } from 'formik'
+import MuiSelect from '@material-ui/core/Select'
 import React from 'react'
 
 const fieldToTextField = ({
@@ -30,12 +30,12 @@ const fieldToTextField = ({
 }
 
 export const Select = ({ children, ...props }) =>
-  <MuiTextField {...fieldToTextField(props)}>
+  <MuiSelect {...fieldToTextField(props)}>
     {children}
-  </MuiTextField>
+  </MuiSelect>
 
 
-export default TextField
+export default Select
 
-TextField.displayName = 'FormikTextField'
-TextField.tabIndex = 0*/
+Select.displayName = 'FormikTextField'
+Select.tabIndex = 0

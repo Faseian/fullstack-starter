@@ -49,6 +49,7 @@ const InventoryLayout = (props) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const inventory = useSelector(state => state.inventory.all)
+  const products = useSelector(state => state.products.all)
   const isFetched = useSelector(state => state.inventory.fetched && state.products.fetched)
   const removeInventory = useCallback(ids => { dispatch(inventoryDuck.removeInventory(ids)) }, [dispatch])
   const saveInventory = useCallback(inventory => { dispatch(inventoryDuck.saveInventory(inventory)) }, [dispatch])
@@ -185,6 +186,7 @@ const InventoryLayout = (props) => {
           isDialogOpen = {isCreateOpen}
           handleDialog = {toggleModals}
           handleInventory = {saveInventory}
+          products = {products}
           initialValues = {{}}
         />
         <InventoryDeleteModal

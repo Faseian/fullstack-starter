@@ -4,8 +4,10 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Grid from '@material-ui/core/Grid'
+import { MeasurementUnits } from '../../constants/units'
+import { MenuItem } from '@material-ui/core'
 import React from 'react'
-import { Select } from '@material-ui/core'
+import Select from '../Form/Select'
 import TextField from '../Form/TextField'
 import { Field, Form, Formik } from 'formik'
 
@@ -16,8 +18,12 @@ class InventoryFormModal extends React.Component {
       handleDialog,
       handleInventory,
       title,
-      initialValues
+      initialValues,
+      products
     } = this.props
+
+    const date = new Date().toISOString().substring(0,10)
+
     return (
       <Dialog
         open={this.props.isDialogOpen}
@@ -38,7 +44,7 @@ class InventoryFormModal extends React.Component {
               id={formName}
             >
               <DialogTitle id='alert-dialog-title'>
-                {`${title} Product`}
+                {`${title} Inventory`}
               </DialogTitle>
               <DialogContent>
                 <Grid container>
@@ -53,8 +59,12 @@ class InventoryFormModal extends React.Component {
                       custom={{ variant: 'outlined', fullWidth: true, }}
                       name='productType'
                       label='Product Type'
-                      component={TextField}
-                    />
+                      component={Select}
+                    >
+                      {products ? Object.values(products).map((value) =>
+                        <MenuItem key = {value.id} value = {value.name}>{value.name}</MenuItem>
+                      ) : null}
+                    </Field>
                     <Field
                       custom={{ variant: 'outlined', fullWidth: true, }}
                       name='description'
@@ -66,18 +76,26 @@ class InventoryFormModal extends React.Component {
                       name='amount'
                       label='Amount'
                       component={TextField}
+                      type = 'number'
+                      placeholder = '0'
                     />
                     <Field
                       custom={{ variant: 'outlined', fullWidth: true, }}
                       name='unitOfMeasurement'
                       label='Unit of Measurement'
-                      component={TextField}
-                    />
+                      component={Select}
+                    >
+                      {Object.keys(MeasurementUnits).map((value) =>
+                        <MenuItem key = {value} value={value}>{value}</MenuItem>
+                      )}
+                    </Field>
                     <Field
                       custom={{ variant: 'outlined', fullWidth: true, }}
                       name='bestBeforeDate'
                       label='Best Before Date'
                       component={TextField}
+                      type = 'date'
+                      defaultValue = {date}
                     />
                   </Grid>
                 </Grid>
