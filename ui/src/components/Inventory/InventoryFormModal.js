@@ -23,7 +23,7 @@ class InventoryFormModal extends React.Component {
     } = this.props
 
     const date = new Date().toISOString().substring(0,10)
-
+    console.log(initialValues)
     return (
       <Dialog
         open={this.props.isDialogOpen}

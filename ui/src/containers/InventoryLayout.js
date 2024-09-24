@@ -189,6 +189,15 @@ const InventoryLayout = (props) => {
           products = {products}
           initialValues = {{}}
         />
+        <InventoryFormModal
+          title = 'Edit'
+          formName = 'inventoryEdit'
+          isDialogOpen = {isEditOpen}
+          handleDialog = {toggleModals}
+          handleInventory = {saveInventory}
+          products = {products}
+          initialValues = {selected[0]}
+        />
         <InventoryDeleteModal
           isDialogOpen = {isDeleteOpen}
           handleDialog = {toggleModals}
