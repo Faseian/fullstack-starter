@@ -29,9 +29,7 @@ export const saveInventory = createAction(actions.INVENTORY_SAVE, (inventory) =>
     .then((suc) => {
       const invs = []
       getState().inventory.all.forEach(inv => {
-        if (inv.id !== suc.data.id) {
-          invs.push(inv)
-        }
+        invs.push(inv)
       })
       invs.push(suc.data)
       dispatch(refreshInventory(invs))
