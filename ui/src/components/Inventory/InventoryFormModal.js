@@ -5,11 +5,10 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Grid from '@material-ui/core/Grid'
 import { MeasurementUnits } from '../../constants/units'
+import { MenuItem } from '@material-ui/core'
 import React from 'react'
-import Select from '../Form/Select'
 import TextField from '../Form/TextField'
 import { Field, Form, Formik } from 'formik'
-import { FormControl, InputLabel, MenuItem } from '@material-ui/core'
 
 class InventoryFormModal extends React.Component {
   render() {
