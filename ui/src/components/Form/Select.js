@@ -1,6 +1,7 @@
 import { getIn } from 'formik'
 import MuiSelect from '@material-ui/core/Select'
 import React from 'react'
+import { FormControl, InputLabel } from '@material-ui/core'
 
 const fieldToTextField = ({
   backgroundColor,
@@ -30,10 +31,12 @@ const fieldToTextField = ({
 }
 
 export const Select = ({ children, ...props }) =>
-  <MuiSelect {...fieldToTextField(props)}>
-    {children}
-  </MuiSelect>
-
+  <FormControl {...fieldToTextField(props)}>
+    <InputLabel>{props.label}</InputLabel>
+    <MuiSelect>
+      {children}
+    </MuiSelect>
+  </FormControl>
 
 export default Select
 

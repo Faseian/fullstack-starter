@@ -9,7 +9,7 @@ import React from 'react'
 import Select from '../Form/Select'
 import TextField from '../Form/TextField'
 import { Field, Form, Formik } from 'formik'
-import { InputLabel, MenuItem } from '@material-ui/core'
+import { FormControl, InputLabel, MenuItem } from '@material-ui/core'
 
 class InventoryFormModal extends React.Component {
   render() {
@@ -62,7 +62,7 @@ class InventoryFormModal extends React.Component {
                     <Field
                       custom={{ variant: 'outlined', fullWidth: true, }}
                       name='productType'
-                      placeholder='Product Type'
+                      label = 'Product Type'
                       component={Select}
                     >
                       {products ? Object.values(products).map((value) =>
