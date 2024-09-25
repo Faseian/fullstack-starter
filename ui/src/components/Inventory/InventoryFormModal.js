@@ -63,7 +63,8 @@ class InventoryFormModal extends React.Component {
                       custom={{ variant: 'outlined', fullWidth: true, }}
                       name='productType'
                       label = 'Product Type'
-                      component={Select}
+                      component={TextField}
+                      select
                     >
                       {products ? Object.values(products).map((value) =>
                         <MenuItem key = {value.id} value = {value.name}>{value.name}</MenuItem>
@@ -93,7 +94,8 @@ class InventoryFormModal extends React.Component {
                       custom={{ variant: 'outlined', fullWidth: true, }}
                       name='unitOfMeasurement'
                       label='Unit of Measurement'
-                      component={Select}
+                      component={TextField}
+                      select
                     >
                       {Object.keys(MeasurementUnits).map((value) =>
                         <MenuItem key = {value} value={value}>{value}</MenuItem>
