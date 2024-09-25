@@ -44,7 +44,7 @@ export const removeInventory = createAction(actions.INVENTORY_DELETE, (ids) =>
     .then((suc) => {
       const invs = []
       getState().inventory.all.forEach(inv => {
-        if (!ids.includes(inv.id)) {
+        if (!suc.data.includes(inv.id)) {
           invs.push(inv)
         }
       })
@@ -52,7 +52,7 @@ export const removeInventory = createAction(actions.INVENTORY_DELETE, (ids) =>
     })
 )
 
-export const updateInventory = createAction(actions.INVETORY_GET_BY_ID, (id, newInv) =>
+export const updateInventory = createAction(actions.INVENTORY_UPDATE, (id, newInv) =>
   (dispatch, getState, config) => axios
     .post(`${config.restAPIUrl}/inventory/update`, { data: id, newInv })
     .then((suc) => {
@@ -66,8 +66,6 @@ export const updateInventory = createAction(actions.INVETORY_GET_BY_ID, (id, new
       dispatch(refreshInventory(invs))
     })
 )
-
-//export const updateInventory = createAction(actions.INVENTORY_UPDATE, (id))
 
 export const refreshInventory = createAction(actions.INVENTORY_REFRESH, (payload) =>
   (dispatcher, getState, config) =>

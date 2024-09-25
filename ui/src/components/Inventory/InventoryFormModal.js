@@ -5,11 +5,11 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Grid from '@material-ui/core/Grid'
 import { MeasurementUnits } from '../../constants/units'
-import { MenuItem } from '@material-ui/core'
 import React from 'react'
 import Select from '../Form/Select'
 import TextField from '../Form/TextField'
 import { Field, Form, Formik } from 'formik'
+import { InputLabel, MenuItem } from '@material-ui/core'
 
 class InventoryFormModal extends React.Component {
   render() {
@@ -23,7 +23,6 @@ class InventoryFormModal extends React.Component {
     } = this.props
 
     const date = new Date().toISOString().substring(0,10)
-    console.log(initialValues)
     return (
       <Dialog
         open={this.props.isDialogOpen}
@@ -47,7 +46,10 @@ class InventoryFormModal extends React.Component {
                 {`${title} Inventory`}
               </DialogTitle>
               <DialogContent>
-                <Grid container>
+                <Grid
+                  container
+                  flex = {1}
+                  spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Field
                       custom={{ variant: 'outlined', fullWidth: true, }}
@@ -55,22 +57,28 @@ class InventoryFormModal extends React.Component {
                       label='Name'
                       component={TextField}
                     />
+                  </Grid>
+                  <Grid item xs={12} sm={12}>
                     <Field
                       custom={{ variant: 'outlined', fullWidth: true, }}
                       name='productType'
-                      label='Product Type'
+                      placeholder='Product Type'
                       component={Select}
                     >
                       {products ? Object.values(products).map((value) =>
                         <MenuItem key = {value.id} value = {value.name}>{value.name}</MenuItem>
                       ) : null}
                     </Field>
+                  </Grid>
+                  <Grid item xs={12} sm={12}>
                     <Field
                       custom={{ variant: 'outlined', fullWidth: true, }}
                       name='description'
                       label='Description'
                       component={TextField}
                     />
+                  </Grid>
+                  <Grid item xs={12} sm={12}>
                     <Field
                       custom={{ variant: 'outlined', fullWidth: true, }}
                       name='amount'
@@ -79,6 +87,8 @@ class InventoryFormModal extends React.Component {
                       type = 'number'
                       placeholder = '0'
                     />
+                  </Grid>
+                  <Grid item xs={12} sm={12}>
                     <Field
                       custom={{ variant: 'outlined', fullWidth: true, }}
                       name='unitOfMeasurement'
@@ -89,6 +99,8 @@ class InventoryFormModal extends React.Component {
                         <MenuItem key = {value} value={value}>{value}</MenuItem>
                       )}
                     </Field>
+                  </Grid>
+                  <Grid item xs={12} sm={12}>
                     <Field
                       custom={{ variant: 'outlined', fullWidth: true, }}
                       name='bestBeforeDate'

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -50,7 +51,7 @@ public class InventoryController {
   }
 
   @PostMapping("/update")
-  public Optional<Inventory> updateInventory(@Valid @RequestBody String id, @Valid @RequestBody Inventory inventory) {
+  public Optional<Inventory> updateInventory(@Valid @RequestParam(required = true) String id, @Valid @RequestParam Inventory inventory) {
     return this.inventoryDAO.update(id, inventory);
   }
 
