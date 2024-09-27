@@ -51,7 +51,8 @@ public class InventoryController {
   }
 
   @PostMapping("/update")
-  public Optional<Inventory> updateInventory(@Valid @RequestParam(required = true, name = "id") String id, @Valid @RequestParam(name = "inventory") Inventory inventory) {
+  public Optional<Inventory> updateInventory(@Valid @RequestParam String id, @Valid @RequestBody Inventory inventory) {
+    Assert.notNull(id, "Id must not be null");
     return this.inventoryDAO.update(id, inventory);
   }
 

@@ -131,6 +131,7 @@ const InventoryLayout = (props) => {
     if (selected.length <= 1) {
       inventory.forEach(element => {
         if (element.id === id) {
+          element.bestBeforeDate = element.bestBeforeDate.substring(0,10)
           setSelectedInventory(element)
         }
       })

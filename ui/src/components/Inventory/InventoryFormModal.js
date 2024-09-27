@@ -39,7 +39,7 @@ class InventoryFormModal extends React.Component {
         onClose={() => { handleDialog(false) }}
       >
         <Formik
-          initialValues={initialValues}
+          initialValues={ initialValues }
           validationSchema={ validationSchema }
           onSubmit={values => {
             const date = new Date(values.bestBeforeDate)
