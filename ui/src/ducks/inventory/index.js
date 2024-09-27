@@ -52,10 +52,9 @@ export const removeInventory = createAction(actions.INVENTORY_DELETE, (ids) =>
 
 export const updateInventory = createAction(actions.INVENTORY_UPDATE, (id, inventory) =>
   (dispatch, getState, config) => {
-    console.log('ID: ' + id + ' Inventory: ' + inventory)
     axios
-      .post(`${config.restAPIUrl}/inventory/update`,inventory
-        , {
+      .post(`${config.restAPIUrl}/inventory/update`, inventory
+        ,{
           params: {
             id: id
           }

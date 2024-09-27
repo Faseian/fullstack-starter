@@ -94,7 +94,7 @@ const InventoryLayout = (props) => {
   const [order, setOrder] = React.useState('asc')
   const [orderBy, setOrderBy] = React.useState('calories')
   const [selected, setSelected] = React.useState([])
-  const [selectedInventory, setSelectedInventory] = React.useState([])
+  const [selectedInventory, setSelectedInventory] = React.useState()
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -131,7 +131,9 @@ const InventoryLayout = (props) => {
     if (selected.length <= 1) {
       inventory.forEach(element => {
         if (element.id === id) {
-          element.bestBeforeDate = element.bestBeforeDate.substring(0,10)
+          if (element.bestBeforeDate !== null) {
+            element.bestBeforeDate = element.bestBeforeDate.substring(0,10)
+          }
           setSelectedInventory(element)
         }
       })

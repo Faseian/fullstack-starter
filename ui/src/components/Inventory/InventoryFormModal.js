@@ -31,6 +31,8 @@ class InventoryFormModal extends React.Component {
     })
 
     const date = new Date().toISOString().substring(0,10)
+    initialValues.bestBeforeDate = initialValues.bestBeforeDate ? initialValues.bestBeforeDate : date
+
     return (
       <Dialog
         open={this.props.isDialogOpen}
@@ -120,7 +122,6 @@ class InventoryFormModal extends React.Component {
                       label='Best Before Date'
                       component={TextField}
                       type = 'date'
-                      defaultValue = {date}
                     />
                   </Grid>
                 </Grid>
