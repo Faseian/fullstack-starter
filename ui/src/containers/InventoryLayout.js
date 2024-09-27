@@ -32,8 +32,8 @@ const useStyles = makeStyles((theme) => ({
 
 const normalizeInventory = (inventory) => inventory.map(inv => ({
   ...inv,
-  unitOfMeasurement: MeasurementUnits[inv.unitOfMeasurement]?.name,
-  bestBeforeDate: moment(inv.bestBeforeDate).format('MM/DD/YYYY')
+  unitOfMeasurement: MeasurementUnits[inv.unitOfMeasurement].name,
+  bestBeforeDate: moment.utc(inv.bestBeforeDate).format('MM/DD/YYYY')
 }))
 
 const headCells = [
@@ -52,12 +52,10 @@ const InventoryLayout = (props) => {
   const products = useSelector(state => state.products.all)
   const isFetched = useSelector(state => state.inventory.fetched && state.products.fetched)
   const removeInventory = useCallback(ids => { dispatch(inventoryDuck.removeInventory(ids)) }, [dispatch])
-
-  const saveInventory = useCallback(inventory => {
-    const [year, month, day] = inventory.bestBeforeDate.split('-')
-    inventory.bestBeforeDate = new Date(year, month, day).toISOString()
-    dispatch(inventoryDuck.saveInventory(inventory))
+  const updateInventory = useCallback(inventory => {
+    dispatch(inventoryDuck.updateInventory(inventory.id, inventory))
   }, [dispatch])
+  const saveInventory = useCallback(inventory => { dispatch(inventoryDuck.saveInventory(inventory)) }, [dispatch])
 
   useEffect(() => {
     if (!isFetched) {
@@ -96,6 +94,7 @@ const InventoryLayout = (props) => {
   const [order, setOrder] = React.useState('asc')
   const [orderBy, setOrderBy] = React.useState('calories')
   const [selected, setSelected] = React.useState([])
+  const [selectedInventory, setSelectedInventory] = React.useState([])
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -128,6 +127,14 @@ const InventoryLayout = (props) => {
       )
     }
     setSelected(newSelected)
+
+    if (selected.length <= 1) {
+      inventory.forEach(element => {
+        if (element.id === id) {
+          setSelectedInventory(element)
+        }
+      })
+    }
   }
 
   const isSelected = (id) => selected.indexOf(id) !== -1
@@ -199,9 +206,9 @@ const InventoryLayout = (props) => {
           formName = 'inventoryEdit'
           isDialogOpen = {isEditOpen}
           handleDialog = {toggleModals}
-          handleInventory = {saveInventory}
+          handleInventory = {updateInventory}
           products = {products}
-          initialValues = {selected[0]}
+          initialValues = {selectedInventory}
         />
         <InventoryDeleteModal
           isDialogOpen = {isDeleteOpen}

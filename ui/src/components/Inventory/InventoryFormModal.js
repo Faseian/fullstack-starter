@@ -1,3 +1,4 @@
+import * as yup from 'yup'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
@@ -21,6 +22,14 @@ class InventoryFormModal extends React.Component {
       products
     } = this.props
 
+    let validationSchema = yup.object().shape({
+      name: yup.string().required('Name required'),
+      productType: yup.string().required('Product type required'),
+      amount: yup.number().min(0).required('Amount is required'),
+      unitOfMeasurement: yup.string().required('Unit of measurement is required'),
+      bestBeforeDate: yup.date().required('Date is required')
+    })
+
     const date = new Date().toISOString().substring(0,10)
     return (
       <Dialog
@@ -31,7 +40,10 @@ class InventoryFormModal extends React.Component {
       >
         <Formik
           initialValues={initialValues}
+          validationSchema={ validationSchema }
           onSubmit={values => {
+            const date = new Date(values.bestBeforeDate)
+            values.bestBeforeDate = date.toISOString()
             handleInventory(values)
             handleDialog(true)
           }}>

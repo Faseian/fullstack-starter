@@ -51,7 +51,7 @@ public class InventoryController {
   }
 
   @PostMapping("/update")
-  public Optional<Inventory> updateInventory(@Valid @RequestParam(required = true) String id, @Valid @RequestParam Inventory inventory) {
+  public Optional<Inventory> updateInventory(@Valid @RequestParam(required = true, name = "id") String id, @Valid @RequestParam(name = "inventory") Inventory inventory) {
     return this.inventoryDAO.update(id, inventory);
   }
 

@@ -50,19 +50,21 @@ export const removeInventory = createAction(actions.INVENTORY_DELETE, (ids) =>
     })
 )
 
-export const updateInventory = createAction(actions.INVENTORY_UPDATE, (id, newInv) =>
-  (dispatch, getState, config) => axios
-    .post(`${config.restAPIUrl}/inventory/update`, { data: id, newInv })
-    .then((suc) => {
-      const invs = []
-      getState().inventory.all.forEach(inv => {
-        if (inv.id !== suc.data.id) {
-          invs.push(inv)
-        }
-      })
-      invs.push(suc.data)
-      dispatch(refreshInventory(invs))
-    })
+export const updateInventory = createAction(actions.INVENTORY_UPDATE, (id, inventory) =>
+  (dispatch, getState, config) => {
+    console.log('ID: ' + id + ' Inventory: ' + inventory)
+    axios
+      .post(`${config.restAPIUrl}/inventory/update`, { id, inventory })
+      .then((suc) => {
+        const invs = []
+        getState().inventory.all.forEach(inv => {
+          if (inv.id !== suc.data.id) {
+            invs.push(inv)
+          }
+        })
+        invs.push(suc.data)
+        dispatch(refreshInventory(invs))
+      }) }
 )
 
 export const refreshInventory = createAction(actions.INVENTORY_REFRESH, (payload) =>
