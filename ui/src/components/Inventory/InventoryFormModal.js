@@ -22,13 +22,16 @@ class InventoryFormModal extends React.Component {
       products
     } = this.props
 
+    const minDate = '01-01-0000'
+    const maxDate = '12-31-9999'
+
     let validationSchema = yup.object().shape({
       name: yup.string().required('Name required'),
       productType: yup.string().required('Product type required'),
       amount: yup.number().min(0).required('Amount is required'),
       unitOfMeasurement: yup.string().required('Unit of measurement is required'),
-      bestBeforeDate: yup.date().required('Date is required').min('01-01-0000', 'Date too early')
-        .max('12-31-9999', 'Date too long')
+      bestBeforeDate: yup.date().required('Date is required').min(minDate, 'Date too early')
+        .max(maxDate, 'Date too long')
     })
     const date = new Date().toISOString().substring(0,10)
 
