@@ -27,7 +27,7 @@ class InventoryFormModal extends React.Component {
       productType: yup.string().required('Product type required'),
       amount: yup.number().min(0).required('Amount is required'),
       unitOfMeasurement: yup.string().required('Unit of measurement is required'),
-      bestBeforeDate: yup.date().required('Date is required').min('01-02-0000', 'Date too early')
+      bestBeforeDate: yup.date().required('Date is required').min('01-01-0000', 'Date too early')
         .max('12-31-9999', 'Date too long')
     })
     const date = new Date().toISOString().substring(0,10)
