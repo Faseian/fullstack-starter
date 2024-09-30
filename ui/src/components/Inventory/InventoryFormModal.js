@@ -33,11 +33,6 @@ class InventoryFormModal extends React.Component {
       bestBeforeDate: yup.date().required('Date is required').min(minDate, 'Date too early')
         .max(maxDate, 'Date too long')
     })
-    const date = new Date().toISOString().substring(0,10)
-
-    if (initialValues !== undefined) {
-      initialValues.bestBeforeDate = initialValues.bestBeforeDate ? initialValues.bestBeforeDate : date
-    }
 
     return (
       <Dialog

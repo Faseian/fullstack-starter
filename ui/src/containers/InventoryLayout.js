@@ -111,6 +111,7 @@ const InventoryLayout = (props) => {
     setSelected([])
   }
 
+  const date = new Date().toISOString().substring(0,10)
   const handleClick = (event, id) => {
     const selectedIndex = selected.indexOf(id)
     let newSelected = []
@@ -131,8 +132,8 @@ const InventoryLayout = (props) => {
     if (selected.length <= 1) {
       inventory.forEach(element => {
         if (element.id === id) {
-          if (element.bestBeforeDate !== null) {
-            element.bestBeforeDate = element.bestBeforeDate.substring(0,10)
+          if (element.bestBeforeDate) {
+            element.bestBeforeDate = element.bestBeforeDate.substring(0,10) ?? date
           }
           setSelectedInventory(element)
         }
@@ -141,6 +142,16 @@ const InventoryLayout = (props) => {
   }
 
   const isSelected = (id) => selected.indexOf(id) !== -1
+
+  const emptyInventory = {
+    name: '',
+    description: '',
+    productType: '',
+    averagePrice: '',
+    amount: '',
+    unitOfMeasurement: '',
+    bestBeforeDate: date
+  }
 
   return (
     <Grid container>
@@ -202,7 +213,7 @@ const InventoryLayout = (props) => {
           handleDialog = {toggleModals}
           handleInventory = {saveInventory}
           products = {products}
-          initialValues = {{}}
+          initialValues = {emptyInventory}
         />
         <InventoryFormModal
           title = 'Edit'
