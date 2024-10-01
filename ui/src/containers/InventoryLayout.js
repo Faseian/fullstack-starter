@@ -2,6 +2,8 @@ import * as inventoryDuck from '../ducks/inventory'
 import * as productDuck from '../ducks/products'
 import Checkbox from '@material-ui/core/Checkbox'
 import Grid from '@material-ui/core/Grid'
+import InventoryDeleteModal from '../components/Inventory/InventoryDeleteModal'
+import InventoryFormModal from '../components/Inventory/InventoryFormModal'
 import { makeStyles } from '@material-ui/core/styles'
 import { MeasurementUnits } from '../constants/units'
 import moment from 'moment'
@@ -12,7 +14,7 @@ import TableCell from '@material-ui/core/TableCell'
 import TableContainer from '@material-ui/core/TableContainer'
 import TableRow from '@material-ui/core/TableRow'
 import { EnhancedTableHead, EnhancedTableToolbar, getComparator, stableSort } from '../components/Table'
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 const useStyles = makeStyles((theme) => ({
@@ -31,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 const normalizeInventory = (inventory) => inventory.map(inv => ({
   ...inv,
   unitOfMeasurement: MeasurementUnits[inv.unitOfMeasurement].name,
-  bestBeforeDate: moment(inv.bestBeforeDate).format('MM/DD/YYYY')
+  bestBeforeDate: moment.utc(inv.bestBeforeDate).format('MM/DD/YYYY')
 }))
 
 const headCells = [
@@ -47,7 +49,14 @@ const InventoryLayout = (props) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const inventory = useSelector(state => state.inventory.all)
+  const products = useSelector(state => state.products.all)
   const isFetched = useSelector(state => state.inventory.fetched && state.products.fetched)
+  const removeInventory = useCallback(ids => { dispatch(inventoryDuck.removeInventory(ids)) }, [dispatch])
+  const updateInventory = useCallback(inventory => {
+    dispatch(inventoryDuck.updateInventory(inventory.id, inventory))
+  }, [dispatch])
+  const saveInventory = useCallback(inventory => { dispatch(inventoryDuck.saveInventory(inventory)) }, [dispatch])
+
   useEffect(() => {
     if (!isFetched) {
       dispatch(inventoryDuck.findInventory())
@@ -55,10 +64,37 @@ const InventoryLayout = (props) => {
     }
   }, [dispatch, isFetched])
 
+  const [isCreateOpen, setCreateOpen] = React.useState(false)
+  const [isEditOpen, setEditOpen] = React.useState(false)
+  const [isDeleteOpen, setDeleteOpen] = React.useState(false)
+
+  const toggleCreate = () => {
+    setCreateOpen(true)
+  }
+
+  const toggleEdit = () => {
+    setEditOpen(true)
+  }
+
+  const toggleDelete = () => {
+    setDeleteOpen(true)
+  }
+
+  const toggleModals = (resetChecked) => {
+    setCreateOpen(false)
+    setDeleteOpen(false)
+    setEditOpen(false)
+    if (resetChecked) {
+      setSelected([])
+    }
+  }
+
+
   const normalizedInventory = normalizeInventory(inventory)
   const [order, setOrder] = React.useState('asc')
   const [orderBy, setOrderBy] = React.useState('calories')
   const [selected, setSelected] = React.useState([])
+  const [selectedInventory, setSelectedInventory] = React.useState()
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -75,6 +111,7 @@ const InventoryLayout = (props) => {
     setSelected([])
   }
 
+  const date = new Date().toISOString().substring(0,10)
   const handleClick = (event, id) => {
     const selectedIndex = selected.indexOf(id)
     let newSelected = []
@@ -91,14 +128,41 @@ const InventoryLayout = (props) => {
       )
     }
     setSelected(newSelected)
+
+    if (selected.length <= 1) {
+      inventory.forEach(element => {
+        if (element.id === id) {
+          if (element.bestBeforeDate) {
+            element.bestBeforeDate = element.bestBeforeDate.substring(0,10) ?? date
+          }
+          setSelectedInventory(element)
+        }
+      })
+    }
   }
 
   const isSelected = (id) => selected.indexOf(id) !== -1
 
+  const emptyInventory = {
+    name: '',
+    description: '',
+    productType: '',
+    averagePrice: '',
+    amount: '',
+    unitOfMeasurement: '',
+    bestBeforeDate: date
+  }
+
   return (
     <Grid container>
       <Grid item xs={12}>
-        <EnhancedTableToolbar numSelected={selected.length} title='Inventory'/>
+        <EnhancedTableToolbar
+          numSelected={selected.length}
+          title='Inventory'
+          toggleCreate={toggleCreate}
+          toggleDelete={toggleDelete}
+          toggleEdit={toggleEdit}
+        />
         <TableContainer component={Paper}>
           <Table size='small' stickyHeader>
             <EnhancedTableHead
@@ -115,6 +179,9 @@ const InventoryLayout = (props) => {
               {stableSort(normalizedInventory, getComparator(order, orderBy))
                 .map(inv => {
                   const isItemSelected = isSelected(inv.id)
+                  if (inv.bestBeforeDate < date) {
+                    alert('Inventory is past expiration!')
+                  }
                   return (
                     <TableRow
                       hover
@@ -126,7 +193,9 @@ const InventoryLayout = (props) => {
                       selected={isItemSelected}
                     >
                       <TableCell padding='checkbox'>
-                        <Checkbox checked={isItemSelected}/>
+                        <Checkbox
+                          checked={isItemSelected}
+                        />
                       </TableCell>
                       <TableCell padding='none'>{inv.name}</TableCell>
                       <TableCell align='right'>{inv.productType}</TableCell>
@@ -140,6 +209,30 @@ const InventoryLayout = (props) => {
             </TableBody>
           </Table>
         </TableContainer>
+        <InventoryFormModal
+          title = 'Create'
+          formName = 'inventoryCreate'
+          isDialogOpen = {isCreateOpen}
+          handleDialog = {toggleModals}
+          handleInventory = {saveInventory}
+          products = {products}
+          initialValues = {emptyInventory}
+        />
+        <InventoryFormModal
+          title = 'Edit'
+          formName = 'inventoryEdit'
+          isDialogOpen = {isEditOpen}
+          handleDialog = {toggleModals}
+          handleInventory = {updateInventory}
+          products = {products}
+          initialValues = {selectedInventory}
+        />
+        <InventoryDeleteModal
+          isDialogOpen = {isDeleteOpen}
+          handleDialog = {toggleModals}
+          handleDelete = {removeInventory}
+          initialValues = {selected.map(check => check)}
+        />
       </Grid>
     </Grid>
   )
