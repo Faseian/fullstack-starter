@@ -179,6 +179,9 @@ const InventoryLayout = (props) => {
               {stableSort(normalizedInventory, getComparator(order, orderBy))
                 .map(inv => {
                   const isItemSelected = isSelected(inv.id)
+                  if (inv.bestBeforeDate < date) {
+                    alert('Inventory is past expiration!')
+                  }
                   return (
                     <TableRow
                       hover
